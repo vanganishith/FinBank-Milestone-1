@@ -12,4 +12,5 @@ public class Account {
     private Integer custId;
     private String accType;
     private Double balance;
+    private String status;
 }

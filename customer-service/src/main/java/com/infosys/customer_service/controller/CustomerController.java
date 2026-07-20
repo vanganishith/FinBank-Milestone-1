@@ -24,6 +24,7 @@ public class CustomerController {
 
     @PostMapping("/add")
     public Customer addCustomer(@RequestBody Customer customer) {
+        customer.setKycStatus("PENDING");
         return repo.save(customer);
     }
 
@@ -46,5 +47,19 @@ public class CustomerController {
     public String deleteCustomer(@PathVariable Integer custId) {
         repo.deleteById(custId);
         return "Customer deleted: " + custId;
+    }
+
+    @PutMapping("/kyc/verify/{custId}")
+    public Customer verifyKyc(@PathVariable Integer custId) {
+        Customer customer = repo.findById(custId).orElseThrow(() -> new RuntimeException("Customer not found"));
+        customer.setKycStatus("VERIFIED");
+        return repo.save(customer);
+    }
+
+    @PutMapping("/kyc/reject/{custId}")
+    public Customer rejectKyc(@PathVariable Integer custId) {
+        Customer customer = repo.findById(custId).orElseThrow(() -> new RuntimeException("Customer not found"));
+        customer.setKycStatus("REJECTED");
+        return repo.save(customer);
     }
 }
